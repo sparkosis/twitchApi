@@ -15,14 +15,18 @@ Class Twitch{
 
     }
 
-    public function Stream(){
+    private function Stream(){
         $response = $this->api->get($this->twitch.'streams/'.$this->chaine.'?client_id='.$this->client_id);
-        return $response->getBody()->getContents();
+        return json_decode($response->getBody()->getContents());
+    }
+
+    private function Channel(){
+        return $this->Stream()->stream->channel;
     }
 
     public function IsOn(){
 
-        $Result = json_decode($this->Stream());
+        $Result = $this->Stream();
         return !is_null($Result->stream);
     }
 
@@ -30,5 +34,20 @@ Class Twitch{
 
         $Result = json_decode($this->Stream());
         return is_null($Result->stream);
+    }
+
+    public function getTitle(){
+        if($this->IsOn()){
+            return $this->Channel()->status;
+        } else {
+            return false;
+        }
+    }
+    public function getViewers(){
+        if($this->IsOn()){
+            return $this->Stream()->stream->viewers;
+        } else {
+            return false;
+        }
     }
 }

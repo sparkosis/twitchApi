@@ -6,4 +6,6 @@ include_once "Twitch.php";
 
 $twitch = new Twitch("eclypsiatv", "pfake1inxcypryrgbpihlzbctyhmh5");
 
-print_r($twitch->Stream());
+echo "<pre>";
+print_r($twitch->getViewers());
+echo "<pre>";
