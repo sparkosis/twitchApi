@@ -1,10 +1,7 @@
 <?php
-ini_set('display_errors', 'On');
-error_reporting(E_ALL);
-include_once "vendor/autoload.php";
-include_once "Twitch.php";
 
-$twitch = new Twitch("jvtv", "pfake1inxcypryrgbpihlzbctyhmh5");
+$twitch = new Twitch("jvtv", "pfake1inxcypryrgbpihlzbctyhmh5"); // Jeux vidéo.com pour l'exemple
+
 ?>
 
 <!DOCTYPE HTML>
@@ -15,8 +12,7 @@ $twitch = new Twitch("jvtv", "pfake1inxcypryrgbpihlzbctyhmh5");
 <body>
 
 
-
-
+<?php echo $twitch->getIframesSemantic(); ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.js"></script>
 <script>

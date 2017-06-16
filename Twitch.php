@@ -1,11 +1,23 @@
 <?php
+/**
+ * Créateur: Sparkosis
+ * Le: 16/06/2017 à 15h10
+ * Class Twitch API Wrapper
+ *
+ */
 use \GuzzleHttp\Client;
 
 Class Twitch{
 
     private $chaine;
-    private $client_id;
-    private $twitch = "https://api.twitch.tv/kraken/";
+    protected $client_id;
+    protected $twitch = "https://api.twitch.tv/kraken/";
+
+    /**
+     * Twitch constructor.
+     * @param $chaine
+     * @param $client_id
+     */
 
     public function __construct($chaine, $client_id){
         $this->chaine = $chaine;
@@ -16,39 +28,58 @@ Class Twitch{
 
     }
 
+    /**
+     * @return mixed
+     */
     private function Stream(){
         $response = $this->api->get($this->twitch.'streams/'.$this->chaine.'?client_id='.$this->client_id);
         return json_decode($response->getBody()->getContents());
     }
 
+    /**
+     * @return mixed
+     */
     public function Channel(){
         return $this->Stream()->stream->channel;
     }
 
+    /**
+     * @return bool Est en ligne
+     */
     public function IsOn(){
 
         $Result = $this->Stream();
         return !is_null($Result->stream);
     }
 
+    /**
+     * @return bool Est pas en ligne
+     */
     public function IsOff(){
 
         $Result = json_decode($this->Stream());
         return is_null($Result->stream);
     }
 
+    /**
+     * @return mixed Channel ID
+     */
     public function getChannelId(){
         return $this->Channel()->_id;
     }
 
+    /**
+     * @return bool Titre du stream
+     */
     public function getTitle(){
-        if($this->IsOn()){
+
             return $this->Channel()->status;
-        } else {
-            return false;
-        }
+
     }
 
+    /**
+     * @return int Nombre de followers
+     */
     public function getFollowers(){
         if($this->IsOn()){
             return $this->Channel()->followers;
@@ -57,6 +88,9 @@ Class Twitch{
         }
     }
 
+    /**
+     * @param $urlToRedirect demande un token de connexion
+     */
     public function RequestToken($urlToRedirect){
 
         $url = $this->twitch.'oauth2/authorize
@@ -69,11 +103,18 @@ Class Twitch{
 
     }
 
+    /**
+     * @return mixed Description
+     */
     public function getBio(){
         $response = $this->api->get($this->twitch.'users/'.$this->chaine.'?client_id='.$this->client_id);
         $result = json_decode($response->getBody()->getContents());
         return $result->bio;
     }
+
+    /**
+     * @return string Lecteur + chat pour semantic ui
+     */
     public function getIframesSemantic(){
 
         $html = " <div class=\"ui two column grid container\">
@@ -87,6 +128,10 @@ Class Twitch{
 
     return $html;
     }
+
+    /**
+     * @return int|string depuis quand le live est en ligne
+     */
     public function GetStreamDuration(){
         if($this->IsOn()){
             $now = strtotime("now");
@@ -96,6 +141,13 @@ Class Twitch{
             return 0;
         }
     }
+
+    /**
+     * @param $dateStart
+     * @param $dateEnd
+     * @return string
+     * Calcul la différence de date
+     */
     private function diffDate($dateStart, $dateEnd){
         $start  = date('Y-m-d H:i:s',$dateStart);
         $end    = date('Y-m-d H:i:s',$dateEnd);
@@ -104,15 +156,10 @@ Class Twitch{
         $diff = $d_start->diff($d_end);
         return $diff->format('Depuis %d jour(s) %h heure(s) et %i minute(s)');
     }
-    public function SetTitle($access_token = NULL, $title){
-        if(!is_null($access_token)){
 
-        }
-        else {
-            return false;
-        }
-    }
-
+    /**
+     * @return int Nombre de viewers
+     */
     public function getViewers(){
         if($this->IsOn()){
             return $this->Stream()->stream->viewers;
