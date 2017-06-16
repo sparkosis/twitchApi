@@ -69,6 +69,24 @@ Class Twitch{
 
     }
 
+    public function getBio(){
+        $response = $this->api->get($this->twitch.'users/'.$this->chaine.'?client_id='.$this->client_id);
+        $result = json_decode($response->getBody()->getContents());
+        return $result->bio;
+    }
+    public function getIframesSemantic(){
+
+        $html = " <div class=\"ui two column grid container\">
+        <div class=\"ten wide column\">
+            <div class=\"ui embed\" data-url=\"http://player.twitch.tv/?channel=$this->chaine\" data-placeholder=\"/images/bear-waving.jpg\"></div>
+        </div>
+        <div class=\"six wide column\">
+            <div class=\"ui embed\" data-url=\"https://www.twitch.tv/$this->chaine/chat\"></div>
+        </div>
+    </div>";
+
+    return $html;
+    }
     public function GetStreamDuration(){
         if($this->IsOn()){
             $now = strtotime("now");
