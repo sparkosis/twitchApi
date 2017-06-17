@@ -1,5 +1,8 @@
 <?php
 
+include 'vendor/autoload.php';
+include 'Twitch.php';
+
 $twitch = new Twitch("jvtv", "pfake1inxcypryrgbpihlzbctyhmh5"); // Jeux vidéo.com pour l'exemple
 
 ?>
