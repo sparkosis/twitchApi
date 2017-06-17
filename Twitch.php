@@ -44,21 +44,16 @@ Class Twitch{
     }
 
     /**
-     * @return bool Est en ligne
+     * @return bool true si est en ligne, false sinon
      */
     public function IsOn(){
 
         $Result = $this->Stream();
-        return !is_null($Result->stream);
-    }
-
-    /**
-     * @return bool Est pas en ligne
-     */
-    public function IsOff(){
-
-        $Result = json_decode($this->Stream());
-        return is_null($Result->stream);
+        if(!is_object($Result)){
+          return !is_null(json_decode($Result)->stream);
+        }else{
+          return !is_null($Result->stream);
+        }
     }
 
     /**
